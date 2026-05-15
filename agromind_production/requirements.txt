@@ -1,0 +1,27 @@
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+python-multipart==0.0.9
+Pillow==10.3.0
+numpy==1.26.4
+aiohttp==3.9.5
+requests==2.31.0
+python-dotenv==1.0.1
+pydantic==2.7.1
+sqlalchemy==2.0.30
+
+# ML — required after training
+torch==2.3.0
+torchvision==0.18.0
+timm==0.9.16
+
+# RAG — required
+sentence-transformers==3.0.0
+faiss-cpu==1.8.0
+
+# Training only (not needed for deployment if models pre-trained)
+scikit-learn==1.5.0
+opencv-python-headless==4.9.0.80
+
+# Translation
+deep-translator==1.11.4
+langdetect==1.0.9

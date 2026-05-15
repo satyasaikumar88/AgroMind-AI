@@ -1,0 +1,153 @@
+{
+  "model": "MobileNetV3-Small",
+  "task": "binary plant vs non-plant classification",
+  "dataset": {
+    "plant": "PlantVillage subset",
+    "nonplant": "ImageNet non-plant classes",
+    "source": "PlantVillage: github.com/spMohanty/PlantVillage-Dataset"
+  },
+  "test_metrics": {
+    "accuracy": 0.9996,
+    "f1_binary": 0.9997,
+    "roc_auc": 1.0
+  },
+  "confusion_matrix": [
+    [
+      1428,
+      1
+    ],
+    [
+      1,
+      3070
+    ]
+  ],
+  "blur_threshold": 100.0,
+  "plant_threshold": 0.6,
+  "known_limits": [
+    "May misclassify close-up images of green objects as plants",
+    "Performance degrades on very unusual plant species not in training set",
+    "Blurry detection relies on Laplacian variance \u2014 may miss certain blur types"
+  ],
+  "history": [
+    {
+      "epoch": 1,
+      "val_acc": 0.9991,
+      "val_f1": 0.9993,
+      "val_auc": 0.9998
+    },
+    {
+      "epoch": 2,
+      "val_acc": 0.9993,
+      "val_f1": 0.9995,
+      "val_auc": 0.9999
+    },
+    {
+      "epoch": 3,
+      "val_acc": 0.9993,
+      "val_f1": 0.9995,
+      "val_auc": 0.9998
+    },
+    {
+      "epoch": 4,
+      "val_acc": 0.9989,
+      "val_f1": 0.9992,
+      "val_auc": 0.9999
+    },
+    {
+      "epoch": 5,
+      "val_acc": 0.9989,
+      "val_f1": 0.9992,
+      "val_auc": 0.9999
+    },
+    {
+      "epoch": 6,
+      "val_acc": 0.9956,
+      "val_f1": 0.9966,
+      "val_auc": 0.9997
+    },
+    {
+      "epoch": 7,
+      "val_acc": 0.9993,
+      "val_f1": 0.9995,
+      "val_auc": 0.9999
+    },
+    {
+      "epoch": 8,
+      "val_acc": 0.9958,
+      "val_f1": 0.9968,
+      "val_auc": 0.9998
+    },
+    {
+      "epoch": 9,
+      "val_acc": 0.9989,
+      "val_f1": 0.9992,
+      "val_auc": 0.9999
+    },
+    {
+      "epoch": 10,
+      "val_acc": 0.9991,
+      "val_f1": 0.9993,
+      "val_auc": 1.0
+    },
+    {
+      "epoch": 11,
+      "val_acc": 0.9987,
+      "val_f1": 0.999,
+      "val_auc": 0.9995
+    },
+    {
+      "epoch": 12,
+      "val_acc": 0.9993,
+      "val_f1": 0.9995,
+      "val_auc": 0.9999
+    },
+    {
+      "epoch": 13,
+      "val_acc": 0.9993,
+      "val_f1": 0.9995,
+      "val_auc": 0.9999
+    },
+    {
+      "epoch": 14,
+      "val_acc": 0.9993,
+      "val_f1": 0.9995,
+      "val_auc": 0.9999
+    },
+    {
+      "epoch": 15,
+      "val_acc": 0.9993,
+      "val_f1": 0.9995,
+      "val_auc": 0.9999
+    },
+    {
+      "epoch": 16,
+      "val_acc": 0.9993,
+      "val_f1": 0.9995,
+      "val_auc": 0.9999
+    },
+    {
+      "epoch": 17,
+      "val_acc": 0.9993,
+      "val_f1": 0.9995,
+      "val_auc": 0.9999
+    },
+    {
+      "epoch": 18,
+      "val_acc": 0.9993,
+      "val_f1": 0.9995,
+      "val_auc": 0.9999
+    },
+    {
+      "epoch": 19,
+      "val_acc": 0.9993,
+      "val_f1": 0.9995,
+      "val_auc": 0.9999
+    },
+    {
+      "epoch": 20,
+      "val_acc": 0.9993,
+      "val_f1": 0.9995,
+      "val_auc": 0.9999
+    }
+  ]
+}

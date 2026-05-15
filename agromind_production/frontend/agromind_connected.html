@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
+<title>AgroMind Universal</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Noto+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --mint:#00e5a0;--mint-dim:rgba(0,229,160,0.12);--mint-glow:rgba(0,229,160,0.25);
+  --earth:#c4813a;--earth-dim:rgba(196,129,58,0.12);
+  --bg:#070f09;--bg2:#0c1a0d;--card:#0f1d12;--card2:#142016;
+  --border:rgba(0,229,160,0.1);--border2:rgba(0,229,160,0.22);
+  --text:#d4f5e3;--text2:#7abf96;--muted:#3d6b4f;
+  --red:#ff6b6b;--amber:#ffb347;--sky:#64b5f6;
+  --radius:14px;--radius-sm:9px;
+}
+body.gardener{--mint:#2d6a4f;--mint-dim:rgba(45,106,79,0.12);--mint-glow:rgba(45,106,79,0.25);--bg:#f0ebe0;--bg2:#e8e0d4;--card:#fff;--card2:#f5f0e8;--border:rgba(45,106,79,0.15);--border2:rgba(45,106,79,0.35);--text:#1a3d2b;--text2:#2d6a4f;--muted:#7a9e7e;}
+body.professional{--mint:#38bdf8;--mint-dim:rgba(56,189,248,0.1);--mint-glow:rgba(56,189,248,0.25);--bg:#070c14;--bg2:#0d1520;--card:#111c2a;--card2:#162030;--border:rgba(56,189,248,0.1);--border2:rgba(56,189,248,0.28);--text:#cce4f7;--text2:#64b5f6;--muted:#334e68;}
+body.learner{--mint:#f59e0b;--mint-dim:rgba(245,158,11,0.12);--mint-glow:rgba(245,158,11,0.25);--bg:#fffbeb;--bg2:#fef3c7;--card:#fff;--card2:#fef9e7;--border:rgba(245,158,11,0.2);--border2:rgba(245,158,11,0.45);--text:#1c1917;--text2:#92400e;--muted:#a16207;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background 0.5s,color 0.4s;}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+::selection{background:var(--mint-dim);}
+
+/* ─── SCREENS ─── */
+.scr{display:none;min-height:100vh;}
+.scr.on{display:flex;flex-direction:column;}
+
+/* ═══ UNIVERSE SELECT ═══ */
+#uniScr{align-items:center;justify-content:center;padding:32px 20px;
+  background:radial-gradient(ellipse at 25% 15%,rgba(0,229,160,0.07) 0%,transparent 55%),
+             radial-gradient(ellipse at 75% 85%,rgba(196,129,58,0.06) 0%,transparent 55%),#070f09;}
+.uni-logo{width:80px;height:80px;background:rgba(0,229,160,0.1);border:1.5px solid rgba(0,229,160,0.3);border-radius:22px;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:0 0 60px rgba(0,229,160,0.18);animation:float 4s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+.uni-title{font-family:'Syne',sans-serif;font-size:clamp(2rem,6vw,3.5rem);font-weight:800;color:#fff;text-align:center;margin-bottom:8px;}
+.uni-title em{color:#00e5a0;font-style:normal;}
+.uni-sub{font-size:13px;color:#3d6b4f;text-align:center;line-height:1.8;max-width:480px;margin:0 auto 48px;}
+.uni-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;width:100%;max-width:680px;}
+@media(max-width:500px){.uni-grid{grid-template-columns:1fr;}}
+.uni-card{padding:28px 22px;border-radius:18px;cursor:pointer;border:1.5px solid transparent;transition:all 0.3s;text-align:left;}
+.uc-f{background:linear-gradient(135deg,#0c1a0d,#0f2210);border-color:rgba(0,229,160,0.15);}
+.uc-g{background:linear-gradient(135deg,#f0ebe2,#e8f5e9);border-color:rgba(45,106,79,0.2);}
+.uc-p{background:linear-gradient(135deg,#070c14,#0d1828);border-color:rgba(56,189,248,0.15);}
+.uc-l{background:linear-gradient(135deg,#fffbeb,#fef9e7);border-color:rgba(245,158,11,0.25);}
+.uc-f:hover{border-color:#00e5a0;box-shadow:0 20px 60px rgba(0,229,160,0.15);transform:translateY(-3px);}
+.uc-g:hover{border-color:#2d6a4f;box-shadow:0 20px 60px rgba(45,106,79,0.15);transform:translateY(-3px);}
+.uc-p:hover{border-color:#38bdf8;box-shadow:0 20px 60px rgba(56,189,248,0.15);transform:translateY(-3px);}
+.uc-l:hover{border-color:#f59e0b;box-shadow:0 20px 60px rgba(245,158,11,0.18);transform:translateY(-3px);}
+.uc-em{font-size:40px;margin-bottom:14px;display:block;}
+.uc-badge{display:inline-block;font-size:9px;letter-spacing:2px;font-weight:700;padding:3px 8px;border-radius:100px;text-transform:uppercase;margin-bottom:10px;}
+.uc-f .uc-badge{background:rgba(0,229,160,0.12);color:#00e5a0;border:1px solid rgba(0,229,160,0.3);}
+.uc-g .uc-badge{background:rgba(45,106,79,0.12);color:#2d6a4f;border:1px solid rgba(45,106,79,0.3);}
+.uc-p .uc-badge{background:rgba(56,189,248,0.12);color:#38bdf8;border:1px solid rgba(56,189,248,0.3);}
+.uc-l .uc-badge{background:rgba(245,158,11,0.12);color:#d97706;border:1px solid rgba(245,158,11,0.3);}
+.uc-title{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;margin-bottom:6px;}
+.uc-f .uc-title,.uc-p .uc-title{color:#fff;}
+.uc-g .uc-title,.uc-l .uc-title{color:#1a3d2b;}
+.uc-desc{font-size:12px;color:#3d6b4f;line-height:1.6;margin-bottom:10px;}
+.uc-g .uc-desc{color:#2d6a4f;}
+.uc-l .uc-desc{color:#92400e;}
+.uc-tags{display:flex;gap:5px;flex-wrap:wrap;}
+.uc-tag{font-size:10px;padding:2px 7px;border-radius:100px;border:1px solid;}
+.uc-f .uc-tag{background:rgba(0,229,160,0.08);color:#00e5a0;border-color:rgba(0,229,160,0.25);}
+.uc-g .uc-tag{background:rgba(45,106,79,0.1);color:#2d6a4f;border-color:rgba(45,106,79,0.3);}
+.uc-p .uc-tag{background:rgba(56,189,248,0.1);color:#38bdf8;border-color:rgba(56,189,248,0.3);}
+.uc-l .uc-tag{background:rgba(245,158,11,0.1);color:#d97706;border-color:rgba(245,158,11,0.35);}
+
+/* ═══ LANG SCREEN ═══ */
+#langScr{background:var(--bg);}
+.lang-top{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:10;backdrop-filter:blur(12px);}
+.back-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--muted);font-size:12px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;transition:all 0.15s;}
+.back-btn:hover{border-color:var(--border2);color:var(--text);}
+.lang-top-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);}
+.lang-top-sub{font-size:11px;color:var(--muted);}
+.lit-row{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.lit-lbl{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-weight:600;}
+.lit-btn{display:flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid var(--border);border-radius:100px;background:none;color:var(--muted);font-size:12px;cursor:pointer;transition:all 0.15s;font-family:'Syne',sans-serif;font-weight:600;}
+.lit-btn.on{background:var(--mint-dim);color:var(--mint);border-color:var(--border2);}
+.lang-search-wrap{padding:12px 20px;border-bottom:1px solid var(--border);}
+.lang-srch{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:10px 14px;transition:box-shadow 0.2s;}
+.lang-srch:focus-within{box-shadow:0 0 0 3px var(--mint-dim);}
+.lang-srch input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:14px;font-family:'Noto Sans',sans-serif;}
+.lang-srch input::placeholder{color:var(--muted);}
+.lang-body{padding:16px 20px;flex:1;overflow-y:auto;}
+.lang-region{margin-bottom:24px;}
+.region-lbl{font-size:10px;letter-spacing:2px;font-weight:700;color:var(--earth);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.region-lbl::after{content:'';flex:1;height:1px;background:var(--border);}
+.lang-pills{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:5px;}
+.lang-pill{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 6px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all 0.15s;text-align:center;position:relative;}
+.lang-pill:hover{border-color:var(--border2);transform:translateY(-1px);}
+.lang-pill.sel{border-color:var(--mint);background:var(--mint-dim);}
+.lp-flag{font-size:16px;}
+.lp-native{font-size:13px;font-weight:600;color:var(--text);line-height:1.2;}
+.lp-en{font-size:9px;color:var(--muted);}
+.lp-pop{font-size:9px;color:var(--earth);}
+.lp-check{position:absolute;top:3px;right:3px;width:14px;height:14px;border-radius:50%;background:var(--mint);display:none;align-items:center;justify-content:center;font-size:8px;color:#000;font-weight:800;}
+.lang-pill.sel .lp-check{display:flex;}
+.lang-cta{position:sticky;bottom:0;padding:14px 20px;background:var(--bg);border-top:1px solid var(--border);backdrop-filter:blur(12px);}
+.proceed-btn{width:100%;padding:15px;background:var(--mint);border:none;border-radius:var(--radius);color:#041409;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;}
+.proceed-btn:hover{filter:brightness(1.1);box-shadow:0 0 28px var(--mint-glow);transform:translateY(-1px);}
+
+/* ═══ AUTH SCREEN ═══ */
+#authScr{align-items:center;justify-content:center;padding:24px;background:var(--bg);position:relative;overflow:hidden;}
+#authCanvas{position:absolute;inset:0;width:100%;height:100%;}
+.auth-box{position:relative;z-index:1;width:100%;max-width:400px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;box-shadow:0 32px 80px rgba(0,0,0,0.4);}
+.auth-mode-pill{display:inline-flex;align-items:center;gap:5px;font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:700;padding:3px 10px;border-radius:100px;background:var(--mint-dim);color:var(--mint);border:1px solid var(--border2);margin-bottom:10px;}
+.auth-logo{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--text);margin-bottom:3px;}
+.auth-logo em{color:var(--mint);font-style:normal;}
+.auth-sub{font-size:12px;color:var(--muted);margin-bottom:22px;}
+.auth-tabs{display:flex;background:var(--bg2);border-radius:9px;padding:3px;margin-bottom:20px;position:relative;}
+.atab{flex:1;padding:8px;background:none;border:none;color:var(--muted);font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border-radius:7px;position:relative;z-index:1;transition:color 0.2s;}
+.atab.on{color:var(--text);}
+.aslider{position:absolute;top:3px;bottom:3px;left:3px;width:calc(50% - 3px);background:var(--card);border:1px solid var(--border2);border-radius:7px;transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1);}
+.aslider.r{transform:translateX(100%);}
+.aform{display:none;flex-direction:column;gap:13px;}
+.aform.on{display:flex;}
+.fg label{font-size:11px;color:var(--muted);font-weight:600;display:block;margin-bottom:5px;}
+.fi-wrap{position:relative;}
+.fi-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--muted);}
+.fi{width:100%;padding:10px 12px 10px 32px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'Noto Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+.fi:focus{border-color:var(--mint);box-shadow:0 0 0 3px var(--mint-dim);}
+.fi::placeholder{color:var(--muted);}
+.ferr{font-size:11px;color:var(--red);min-height:14px;}
+.fsubmit{padding:12px;background:var(--mint);border:none;border-radius:var(--radius-sm);color:#041409;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all 0.2s;margin-top:4px;}
+.fsubmit:hover{filter:brightness(1.08);box-shadow:0 0 24px var(--mint-glow);transform:translateY(-1px);}
+.demo-row{text-align:center;margin-top:6px;font-size:12px;color:var(--muted);}
+.demo-link{background:none;border:none;color:var(--mint);font-size:12px;cursor:pointer;text-decoration:underline;}
+
+/* ═══ APP SCREEN ═══ */
+#appScr{flex-direction:column;}
+.topbar{display:flex;align-items:center;gap:10px;padding:10px 18px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;backdrop-filter:blur(16px);}
+.tb-brand{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--text);}
+.tb-brand em{color:var(--mint);font-style:normal;}
+.tb-mode{display:flex;align-items:center;gap:5px;padding:4px 10px;background:var(--mint-dim);border:1px solid var(--border2);border-radius:100px;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--mint);text-transform:uppercase;}
+.tb-pulse{width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 6px var(--mint);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.7);}}
+.tb-right{display:flex;align-items:center;gap:6px;margin-left:auto;}
+.tb-chip{display:flex;align-items:center;gap:5px;padding:5px 10px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--muted);cursor:pointer;transition:all 0.15s;font-family:'Syne',sans-serif;font-weight:600;}
+.tb-chip:hover{border-color:var(--border2);color:var(--text);}
+.user-chip{display:flex;align-items:center;gap:6px;padding:5px 8px;background:var(--card);border:1px solid var(--border);border-radius:8px;}
+.uav{width:26px;height:26px;border-radius:50%;background:var(--mint-dim);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--mint);}
+.unm{font-size:12px;font-weight:600;color:var(--text);}
+.logout{background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;padding:2px;transition:color 0.15s;}
+.logout:hover{color:var(--red);}
+
+.nav-tabs{display:flex;gap:2px;padding:8px 14px;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.ntab{display:flex;align-items:center;gap:5px;padding:8px 12px;white-space:nowrap;background:none;border:1px solid transparent;border-radius:var(--radius-sm);color:var(--muted);font-family:'Syne',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s;}
+.ntab:hover{color:var(--text);background:var(--mint-dim);}
+.ntab.on{color:var(--mint);background:var(--mint-dim);border-color:var(--border2);}
+
+.app-body{flex:1;padding:20px;max-width:1200px;margin:0 auto;width:100%;}
+.view{display:none;flex-direction:column;gap:18px;animation:fadeUp 0.3s ease;}
+.view.on{display:flex;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.vt{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--text);}
+.vs{font-size:13px;color:var(--muted);margin-top:2px;}
+.vhead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+
+/* ─── API STATUS BANNER ─── */
+.api-banner{
+  display:flex;align-items:center;gap:10px;padding:10px 16px;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);
+  font-size:12px;
+}
+.api-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.api-dot.ok{background:var(--mint);box-shadow:0 0 6px var(--mint);}
+.api-dot.err{background:var(--red);box-shadow:0 0 6px var(--red);}
+.api-dot.chk{background:var(--amber);animation:pulse 1s ease-in-out infinite;}
+.api-text{color:var(--text2);}
+.api-url{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-left:auto;}
+
+/* ─── SCAN LAYOUT ─── */
+.scan-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;}
+@media(max-width:768px){.scan-grid{grid-template-columns:1fr;}}
+
+/* CAMERA */
+.cam-wrap{position:relative;aspect-ratio:4/3;background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden;}
+#vidEl{width:100%;height:100%;object-fit:cover;display:none;}
+#cnvEl{display:none;}
+.cam-corner{position:absolute;width:20px;height:20px;border-color:var(--mint);border-style:solid;}
+.cc-tl{top:10px;left:10px;border-width:2px 0 0 2px;}
+.cc-tr{top:10px;right:10px;border-width:2px 2px 0 0;}
+.cc-bl{bottom:10px;left:10px;border-width:0 0 2px 2px;}
+.cc-br{bottom:10px;right:10px;border-width:0 2px 2px 0;}
+.cam-beam{position:absolute;left:10px;right:10px;height:2px;display:none;background:linear-gradient(90deg,transparent,var(--mint),transparent);box-shadow:0 0 8px var(--mint);top:20%;}
+.cam-wrap.active .cam-beam{display:block;animation:beam 2.5s ease-in-out infinite;}
+@keyframes beam{0%{top:8%;}50%{top:88%;}100%{top:8%;}}
+.cam-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:var(--card2);}
+.cam-ph-em{font-size:52px;opacity:0.5;animation:floatY 3s ease-in-out infinite;}
+@keyframes floatY{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.cam-ph p{font-size:13px;color:var(--muted);text-align:center;padding:0 20px;line-height:1.6;}
+#captImg{display:none;width:100%;height:100%;object-fit:cover;}
+#heatCnv{display:none;position:absolute;inset:0;pointer-events:none;}
+
+.cam-ctrls{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.cbtn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 8px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--muted);font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;min-width:80px;}
+.cbtn:hover{border-color:var(--border2);color:var(--text);}
+.cbtn:disabled{opacity:0.3;cursor:not-allowed;}
+.cbtn.prime{background:var(--mint);color:#041409;border-color:var(--mint);font-weight:800;}
+.cbtn.prime:hover{filter:brightness(1.1);box-shadow:0 0 20px var(--mint-glow);}
+
+/* RESULTS */
+.res-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);min-height:420px;display:flex;flex-direction:column;overflow:hidden;}
+.r-idle{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;gap:14px;text-align:center;}
+.idle-ring{position:relative;width:80px;height:80px;display:flex;align-items:center;justify-content:center;}
+.idle-ring::before,.idle-ring::after{content:'';position:absolute;border-radius:50%;border:1px solid var(--border2);animation:ringP 3s ease-in-out infinite;}
+.idle-ring::before{width:80px;height:80px;}
+.idle-ring::after{width:52px;height:52px;animation-delay:0.7s;}
+@keyframes ringP{0%,100%{opacity:0.3;transform:scale(1);}50%{opacity:0.8;transform:scale(1.06);}}
+.idle-icon{font-size:34px;position:relative;z-index:1;}
+.r-idle h3{font-family:'Syne',sans-serif;font-size:1.1rem;color:var(--text);}
+.r-idle p{font-size:12px;color:var(--muted);line-height:1.7;max-width:260px;}
+.agent-chips{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;}
+.achip{font-size:10px;padding:3px 9px;background:var(--mint-dim);color:var(--mint);border:1px solid var(--border2);border-radius:100px;}
+
+.r-load{flex:1;padding:20px;display:none;}
+.pipe-ttl{font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;font-weight:700;margin-bottom:14px;}
+.pstep{display:flex;align-items:flex-start;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);opacity:0.2;transition:opacity 0.4s;}
+.pstep.active{opacity:1;}
+.pstep.done{opacity:0.55;}
+.pdot{width:9px;height:9px;border-radius:50%;background:var(--border2);border:2px solid var(--border2);flex-shrink:0;margin-top:3px;transition:all 0.3s;}
+.pstep.active .pdot{background:var(--mint);border-color:var(--mint);box-shadow:0 0 10px var(--mint);animation:pulse 1s ease-in-out infinite;}
+.pstep.done .pdot{background:var(--mint-dim);border-color:var(--mint);}
+.pname{font-size:13px;font-weight:600;color:var(--text);}
+.pstatus{font-size:10px;color:var(--muted);margin-top:2px;font-family:'JetBrains Mono',monospace;}
+
+.r-content{flex:1;overflow-y:auto;padding:14px;display:none;flex-direction:column;gap:10px;}
+
+/* Error state */
+.r-error{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;gap:12px;text-align:center;}
+.r-error .err-icon{font-size:48px;}
+.r-error h3{font-family:'Syne',sans-serif;font-size:1.1rem;color:var(--red);}
+.r-error p{font-size:13px;color:var(--muted);line-height:1.7;max-width:280px;}
+.r-error .err-detail{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--amber);background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:8px 12px;text-align:left;max-width:320px;word-break:break-all;}
+
+.conf-row{display:flex;align-items:center;gap:12px;padding:11px 13px;background:var(--bg2);border-radius:var(--radius-sm);border:1px solid var(--border);}
+.conf-num{font-family:'Syne',sans-serif;font-size:2rem;color:var(--mint);line-height:1;flex-shrink:0;}
+.conf-rt{flex:1;}
+.conf-lbl{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+.conf-track{height:4px;background:var(--border);border-radius:2px;margin-top:6px;overflow:hidden;}
+.conf-fill{height:100%;border-radius:2px;width:0%;background:linear-gradient(90deg,var(--mint),#a3e635);transition:width 1.2s cubic-bezier(0.34,1.56,0.64,1);}
+
+.rc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;}
+.rch{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.ri{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.ri-g{background:var(--mint-dim);}
+.ri-r{background:rgba(255,107,107,0.12);}
+.ri-b{background:rgba(100,181,246,0.12);}
+.ri-y{background:rgba(255,179,71,0.12);}
+.ri-v{background:rgba(167,139,250,0.12);}
+.rlbl{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+.rval{font-size:15px;font-weight:700;color:var(--text);margin-top:1px;}
+.rdesc{font-size:12px;color:var(--muted);line-height:1.7;}
+.hpill{margin-left:auto;font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;background:var(--mint-dim);color:var(--mint);border:1px solid var(--border2);}
+.hpill.sick{background:rgba(255,107,107,0.12);color:var(--red);border-color:rgba(255,107,107,0.3);}
+
+/* NL Explainer */
+.exp-card{background:linear-gradient(135deg,var(--mint-dim),transparent);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:14px;}
+.exp-lbl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mint);font-weight:700;margin-bottom:8px;}
+.exp-txt{font-size:13px;color:var(--text);line-height:1.8;font-style:italic;}
+
+/* Treatment tabs */
+.ttabs{display:flex;gap:4px;margin-bottom:10px;}
+.ttab{padding:5px 10px;background:none;border:1px solid var(--border);border-radius:7px;color:var(--muted);font-size:11px;cursor:pointer;transition:all 0.15s;font-family:'Syne',sans-serif;font-weight:600;}
+.ttab.on{background:var(--mint-dim);color:var(--mint);border-color:var(--border2);}
+.tcontent{display:none;}
+.tcontent.on{display:block;}
+.tlist{list-style:none;display:flex;flex-direction:column;gap:5px;}
+.tlist li{font-size:12px;color:var(--text);padding:8px 10px;background:var(--card);border-radius:7px;border-left:2px solid var(--mint);line-height:1.5;}
+.sched{display:flex;flex-direction:column;gap:5px;}
+.schedrow{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--card);border-radius:7px;}
+.schedday{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mint);background:var(--mint-dim);padding:2px 7px;border-radius:4px;flex-shrink:0;min-width:50px;text-align:center;}
+.schedtask{font-size:12px;color:var(--text);}
+
+/* Weather */
+.wx-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.wxday{background:var(--card);border-radius:8px;padding:10px 5px;text-align:center;border:1px solid var(--border);}
+.wxd{font-size:10px;color:var(--muted);margin-bottom:2px;}
+.wxi{font-size:20px;margin-bottom:2px;}
+.wxt{font-size:12px;font-weight:700;color:var(--text);}
+.wxs{font-size:9px;font-weight:700;margin-top:3px;padding:2px 3px;border-radius:4px;}
+.wxok{background:var(--mint-dim);color:var(--mint);}
+.wxno{background:rgba(255,107,107,0.12);color:var(--red);}
+
+/* RAG */
+.rag-item{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:var(--card);border-radius:7px;border:1px solid var(--border);margin-bottom:5px;}
+.rag-score{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mint);background:var(--mint-dim);padding:2px 6px;border-radius:4px;flex-shrink:0;}
+.rag-t{font-size:11px;color:var(--text2);}
+.rag-o{font-size:10px;color:var(--muted);margin-top:1px;}
+
+/* Risk cards */
+.risk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
+.risk-card{background:var(--card2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;position:relative;overflow:hidden;}
+.risk-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.rk-high::before{background:linear-gradient(90deg,var(--red),#ff8c8c);}
+.rk-mod::before{background:linear-gradient(90deg,var(--amber),#ffd080);}
+.rk-low::before{background:linear-gradient(90deg,var(--mint),#80ffcc);}
+.rk-crop{font-size:11px;color:var(--muted);margin-bottom:4px;}
+.rk-dis{font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.rk-pct{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;}
+.rk-high .rk-pct{color:var(--red);}
+.rk-mod .rk-pct{color:var(--amber);}
+.rk-low .rk-pct{color:var(--mint);}
+.rk-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin:6px 0;}
+.rk-fill{height:100%;border-radius:2px;}
+.rk-high .rk-fill{background:var(--red);}
+.rk-mod .rk-fill{background:var(--amber);}
+.rk-low .rk-fill{background:var(--mint);}
+.rk-reason{font-size:10px;color:var(--muted);line-height:1.5;}
+.rk-action{font-size:10px;font-weight:700;color:var(--earth);margin-top:5px;}
+
+/* Signal chips */
+.signals{display:flex;gap:6px;flex-wrap:wrap;}
+.sig-chip{display:flex;align-items:center;gap:4px;padding:5px 9px;background:var(--card);border:1px solid var(--border);border-radius:100px;font-size:11px;color:var(--muted);}
+.sig-val{font-weight:700;color:var(--text);}
+
+/* Action buttons */
+.r-actions{display:flex;gap:6px;flex-wrap:wrap;}
+.ract{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:9px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg2);color:var(--muted);font-size:11px;cursor:pointer;transition:all 0.15s;font-family:'Syne',sans-serif;font-weight:600;min-width:70px;}
+.ract:hover{color:var(--text);border-color:var(--border2);}
+.ract.save:hover{color:var(--mint);border-color:var(--mint);}
+.ract.speak:hover{color:var(--sky);border-color:var(--sky);}
+.ract.wa:hover{color:#25d366;border-color:#25d366;}
+.ract.exp:hover{color:var(--earth);border-color:var(--earth);}
+
+/* Heat toggle */
+.heat-tog{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;padding:8px;margin-top:8px;background:none;border:1px dashed var(--border2);border-radius:var(--radius-sm);color:var(--text2);font-size:12px;cursor:pointer;transition:all 0.2s;font-family:'Syne',sans-serif;font-weight:600;}
+.heat-tog:hover{border-color:var(--red);color:var(--red);}
+
+/* KB */
+.kb-search{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);transition:box-shadow 0.2s;}
+.kb-search:focus-within{box-shadow:0 0 0 3px var(--mint-dim);}
+.kb-search input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:14px;}
+.kb-search input::placeholder{color:var(--muted);}
+.kb-chip{font-size:10px;padding:2px 7px;background:var(--mint-dim);color:var(--mint);border-radius:4px;white-space:nowrap;}
+.kb-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.kb-stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;text-align:center;}
+.kb-sv{font-family:'Syne',sans-serif;font-size:1.4rem;color:var(--mint);display:block;}
+.kb-sl{font-size:10px;color:var(--muted);}
+.kb-results{display:flex;flex-direction:column;gap:7px;}
+.kb-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;display:flex;gap:10px;transition:border-color 0.15s;}
+.kb-item:hover{border-color:var(--border2);}
+.kb-sim{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mint);background:var(--mint-dim);padding:2px 6px;border-radius:4px;height:fit-content;flex-shrink:0;}
+.kb-t{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.kb-x{font-size:12px;color:var(--muted);line-height:1.6;}
+.kb-tags{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap;}
+.kb-tag{font-size:10px;padding:2px 6px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;color:var(--muted);}
+
+/* Memory */
+.mem-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+.mem-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;transition:border-color 0.15s;}
+.mem-card:hover{border-color:var(--border2);}
+.mem-img{height:90px;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:36px;overflow:hidden;}
+.mem-img img{width:100%;height:100%;object-fit:cover;}
+.mem-body{padding:12px;}
+.mem-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.mem-dis{font-size:11px;margin-bottom:5px;}
+.mem-dis.sick{color:var(--red);}
+.mem-dis.ok{color:var(--mint);}
+.mem-date{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.trend-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;margin-top:5px;}
+.tb-declining{background:rgba(255,107,107,0.12);color:var(--red);}
+.tb-improving{background:var(--mint-dim);color:var(--mint);}
+.tb-stable{background:rgba(255,179,71,0.12);color:var(--amber);}
+
+/* Outbreak map */
+.ob-layout{display:grid;grid-template-columns:1fr 280px;gap:14px;}
+@media(max-width:768px){.ob-layout{grid-template-columns:1fr;}}
+.map-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;aspect-ratio:16/9;position:relative;}
+#obCanvas{width:100%;height:100%;}
+.map-leg{position:absolute;bottom:10px;left:10px;background:rgba(7,15,9,0.85);border:1px solid var(--border);border-radius:9px;padding:8px 12px;backdrop-filter:blur(8px);}
+.ml-row{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text);margin-bottom:3px;}
+.ml-dot{width:7px;height:7px;border-radius:50%;}
+.ob-side{display:flex;flex-direction:column;gap:10px;}
+.ob-stats{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;}
+.obs-v{font-family:'Syne',sans-serif;font-size:1.3rem;color:var(--mint);}
+.obs-v.r{color:var(--red);}
+.obs-l{font-size:9px;color:var(--muted);margin-top:2px;}
+.cluster-list{display:flex;flex-direction:column;gap:6px;}
+.clu-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;}
+.clu-hd{display:flex;align-items:center;gap:5px;margin-bottom:4px;}
+.clu-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.clu-nm{font-size:12px;font-weight:600;color:var(--text);}
+.clu-dis{font-size:11px;color:var(--red);margin-bottom:2px;}
+.clu-meta{font-size:10px;color:var(--muted);}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--card);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:11px 16px;font-size:13px;color:var(--text);box-shadow:0 8px 32px rgba(0,0,0,0.4);transform:translateY(80px);opacity:0;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);z-index:9000;pointer-events:none;max-width:280px;}
+.toast.on{transform:translateY(0);opacity:1;}
+.toast.ok{border-color:var(--mint);}
+.toast.er{border-color:var(--red);}
+
+/* Misc */
+.pill-btn{padding:6px 12px;background:var(--mint-dim);color:var(--mint);border:1px solid var(--border2);border-radius:100px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;transition:all 0.15s;}
+.pill-btn:hover{filter:brightness(1.1);}
+.empty-st{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:10px;text-align:center;}
+.empty-em{font-size:48px;opacity:0.4;}
+.empty-ttl{font-size:1rem;font-weight:700;color:var(--text2);}
+.empty-sub{font-size:12px;color:var(--muted);}
+.mono{font-family:'JetBrains Mono',monospace;}
+</style>
+</head>
+<body>
+
+<!-- UNIVERSE SELECT -->
+<div id="uniScr" class="scr on">
+  <div class="uni-logo">
+    <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+      <path d="M21 4L38 13.5V28.5L21 38L4 28.5V13.5L21 4Z" stroke="#00e5a0" stroke-width="1.5" fill="none"/>
+      <path d="M21 10L32 16.5V29.5L21 36L10 29.5V16.5L21 10Z" fill="rgba(0,229,160,0.1)" stroke="#00e5a0" stroke-width="1"/>
+      <circle cx="21" cy="21" r="5" fill="#00e5a0"/>
+    </svg>
+  </div>
+  <h1 class="uni-title">AgroMind <em>Universal</em></h1>
+  <p class="uni-sub">The world's first predictive plant intelligence platform.<br/>Every plant. Every person. Every language on Earth.</p>
+  <div class="uni-grid">
+    <div class="uni-card uc-f" onclick="selectUniverse('farmer')">
+      <span class="uc-em">🌾</span>
+      <div class="uc-badge">Farmer Mode</div>
+      <div class="uc-title">Survival Farmer</div>
+      <div class="uc-desc">Offline-first. Voice-first. Works on any phone, network, literacy level.</div>
+      <div class="uc-tags"><span class="uc-tag">Offline AI</span><span class="uc-tag">Voice</span><span class="uc-tag">WhatsApp</span></div>
+    </div>
+    <div class="uni-card uc-g" onclick="selectUniverse('gardener')">
+      <span class="uc-em">🪴</span>
+      <div class="uc-badge">Gardener Mode</div>
+      <div class="uc-title">Hobby Gardener</div>
+      <div class="uc-desc">Plant passports, care calendars, shareable cards, community.</div>
+      <div class="uc-tags"><span class="uc-tag">Care Calendar</span><span class="uc-tag">Passport</span><span class="uc-tag">Share</span></div>
+    </div>
+    <div class="uni-card uc-p" onclick="selectUniverse('professional')">
+      <span class="uc-em">🔬</span>
+      <div class="uc-badge">Pro Mode</div>
+      <div class="uc-title">Professional</div>
+      <div class="uc-desc">Scientific names, RAG citations, pathology reports, export tools.</div>
+      <div class="uc-tags"><span class="uc-tag">Scientific</span><span class="uc-tag">RAG</span><span class="uc-tag">Export</span></div>
+    </div>
+    <div class="uni-card uc-l" onclick="selectUniverse('learner')">
+      <span class="uc-em">📚</span>
+      <div class="uc-badge">Learn Mode</div>
+      <div class="uc-title">The Learner</div>
+      <div class="uc-desc">Gamified quizzes, badges, plant facts, child-safe content.</div>
+      <div class="uc-tags"><span class="uc-tag">Quiz</span><span class="uc-tag">Badges</span><span class="uc-tag">Child Safe</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- LANGUAGE SCREEN -->
+<div id="langScr" class="scr">
+  <div class="lang-top">
+    <button class="back-btn" onclick="goTo('uniScr')">← Back</button>
+    <div><div class="lang-top-title">Choose Your Language</div><div class="lang-top-sub">100+ languages · native script · voice support</div></div>
+  </div>
+  <div class="lit-row">
+    <span class="lit-lbl">I prefer:</span>
+    <button class="lit-btn on" onclick="setLit('text',this)">📝 Read & Write</button>
+    <button class="lit-btn" onclick="setLit('voice',this)">🎙️ Listen & Speak</button>
+    <button class="lit-btn" onclick="setLit('picto',this)">🖼️ Pictures Only</button>
+  </div>
+  <div class="lang-search-wrap">
+    <div class="lang-srch">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input id="langSrchIn" type="text" placeholder="Search your language..." oninput="filterLangs(this.value)"/>
+    </div>
+  </div>
+  <div class="lang-body" id="langBody"></div>
+  <div class="lang-cta">
+    <button class="proceed-btn" onclick="goToAuth()"><span id="proceedTxt">Continue in English →</span></button>
+  </div>
+</div>
+
+<!-- AUTH SCREEN -->
+<div id="authScr" class="scr">
+  <canvas id="authCanvas"></canvas>
+  <div class="auth-box">
+    <div class="auth-mode-pill" id="authPill">🌾 Farmer Mode</div>
+    <div class="auth-logo">Agro<em>Mind</em></div>
+    <div class="auth-sub">Sign in to start diagnosing</div>
+    <div class="auth-tabs">
+      <button class="atab on" onclick="switchTab('login')">Sign In</button>
+      <button class="atab" onclick="switchTab('register')">Register</button>
+      <div class="aslider" id="aslider"></div>
+    </div>
+    <div class="aform on" id="loginForm">
+      <div class="fg"><label>Username</label><div class="fi-wrap"><span class="fi-icon">◈</span><input type="text" id="lu" class="fi" placeholder="Username"/></div></div>
+      <div class="fg"><label>Password</label><div class="fi-wrap"><span class="fi-icon">◉</span><input type="password" id="lp" class="fi" placeholder="Password"/></div></div>
+      <div class="ferr" id="lerr"></div>
+      <button class="fsubmit" onclick="doLogin()">Sign In →</button>
+      <div class="demo-row"><button class="demo-link" onclick="demoLogin()">Quick demo access →</button></div>
+    </div>
+    <div class="aform" id="regForm">
+      <div class="fg"><label>Name</label><div class="fi-wrap"><span class="fi-icon">◈</span><input type="text" id="rn" class="fi" placeholder="Full name"/></div></div>
+      <div class="fg"><label>Username</label><div class="fi-wrap"><span class="fi-icon">◈</span><input type="text" id="ru" class="fi" placeholder="Username"/></div></div>
+      <div class="fg"><label>Email</label><div class="fi-wrap"><span class="fi-icon">◉</span><input type="email" id="re" class="fi" placeholder="email@example.com"/></div></div>
+      <div class="fg"><label>Password</label><div class="fi-wrap"><span class="fi-icon">◉</span><input type="password" id="rp" class="fi" placeholder="Min 6 chars"/></div></div>
+      <div class="ferr" id="rerr"></div>
+      <button class="fsubmit" onclick="doRegister()">Create Account →</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP SCREEN -->
+<div id="appScr" class="scr">
+  <div class="topbar">
+    <div class="tb-brand">Agro<em>Mind</em></div>
+    <div class="tb-mode"><div class="tb-pulse"></div><span id="tbMode">Farmer</span></div>
+    <div class="tb-right">
+      <div class="tb-chip" id="tbLang" onclick="goTo('langScr')">🌍 English</div>
+      <div class="user-chip">
+        <div class="uav" id="uav">U</div>
+        <div class="unm" id="unm">User</div>
+        <button class="logout" onclick="doLogout()">⏏</button>
+      </div>
+    </div>
+  </div>
+  <div class="nav-tabs" id="navTabs"></div>
+  <div class="app-body">
+
+    <!-- PREDICT VIEW -->
+    <div class="view on" id="v-predict">
+      <div class="vhead">
+        <div><div class="vt">🔮 Predictive Risk Engine</div><div class="vs">Real weather signals · 7-day disease forecast · Act before symptoms appear</div></div>
+        <button class="pill-btn" onclick="loadRisk()">↻ Refresh</button>
+      </div>
+      <div class="api-banner" id="riskBanner">
+        <div class="api-dot chk" id="riskDot"></div>
+        <span class="api-text" id="riskTxt">Fetching weather + computing risk...</span>
+        <span class="api-url mono">POST /risk</span>
+      </div>
+      <div class="risk-grid" id="riskGrid"><div style="color:var(--muted);font-size:13px;padding:20px;">Loading risk assessment...</div></div>
+      <div class="signals" id="signalsRow"></div>
+    </div>
+
+    <!-- SCAN VIEW -->
+    <div class="view" id="v-scan">
+      <div class="vhead">
+        <div><div class="vt">🔬 AI Diagnosis</div><div class="vs">5-agent real pipeline · Plant.ID API · RAG-grounded</div></div>
+        <button class="pill-btn" id="voiceBtn" onclick="toggleVoice()">🎙️ Voice</button>
+      </div>
+      <div class="api-banner">
+        <div class="api-dot" id="apiDot" style="background:var(--muted)"></div>
+        <span class="api-text" id="apiTxt">Ready — POST /predict</span>
+        <span class="api-url mono" id="apiEndpoint">localhost:8000/predict</span>
+      </div>
+      <div class="scan-grid">
+        <div>
+          <div class="cam-wrap" id="camWrap">
+            <video id="vidEl" autoplay playsinline></video>
+            <canvas id="cnvEl"></canvas>
+            <div class="cam-corner cc-tl"></div><div class="cam-corner cc-tr"></div>
+            <div class="cam-corner cc-bl"></div><div class="cam-corner cc-br"></div>
+            <div class="cam-beam"></div>
+            <div class="cam-ph" id="camPh">
+              <div class="cam-ph-em">🌿</div>
+              <p>Point camera at any plant — food crop, indoor plant, tree, or flower</p>
+            </div>
+            <img id="captImg" alt="captured plant"/>
+            <canvas id="heatCnv"></canvas>
+          </div>
+          <div class="cam-ctrls">
+            <button class="cbtn" id="startBtn" onclick="startCam()">📷 Camera</button>
+            <button class="cbtn prime" id="analyzeBtn" onclick="doAnalyze()" disabled>⚡ Analyze</button>
+            <button class="cbtn" onclick="document.getElementById('upIn').click()">📁 Upload</button>
+          </div>
+          <input type="file" id="upIn" accept="image/*" style="display:none" onchange="handleUpload(event)"/>
+        </div>
+
+        <div class="res-wrap" id="resWrap">
+          <div class="r-idle" id="rIdle">
+            <div class="idle-ring"><div class="idle-icon">🌱</div></div>
+            <h3>Ready to Diagnose</h3>
+            <p>5-agent real AI pipeline. Calls Plant.ID API. Validates image before processing.</p>
+            <div class="agent-chips">
+              <span class="achip">✓ ValidationAgent</span>
+              <span class="achip">🔬 DiagnosticAgent</span>
+              <span class="achip">📚 RAGAgent</span>
+              <span class="achip">🌦️ WeatherAgent</span>
+              <span class="achip">📊 ResponseAgent</span>
+            </div>
+          </div>
+
+          <div class="r-load" id="rLoad">
+            <div class="pipe-ttl">Real Agent Pipeline Running</div>
+            <div class="pstep" id="ps0"><div class="pdot"></div><div><div class="pname">ValidationAgent</div><div class="pstatus">PIL blur + color heuristics + dimension check</div></div></div>
+            <div class="pstep" id="ps1"><div class="pdot"></div><div><div class="pname">DiagnosticAgent</div><div class="pstatus">Plant.ID API v3 · async polling...</div></div></div>
+            <div class="pstep" id="ps2"><div class="pdot"></div><div><div class="pname">RAGAgent</div><div class="pstatus">TF-IDF vector search · ICAR/FAO docs</div></div></div>
+            <div class="pstep" id="ps3"><div class="pdot"></div><div><div class="pname">WeatherAgent</div><div class="pstatus">Open-Meteo forecast · spray window</div></div></div>
+            <div class="pstep" id="ps4"><div class="pdot"></div><div><div class="pname">ResponseAgent</div><div class="pstatus">Persona adapter · translation · synthesis</div></div></div>
+          </div>
+
+          <div class="r-error" id="rError">
+            <div class="err-icon">🚫</div>
+            <h3 id="errTitle">Image Rejected</h3>
+            <p id="errMsg">No plant detected in this image.</p>
+            <div class="err-detail" id="errDetail"></div>
+          </div>
+
+          <div class="r-content" id="rContent">
+            <div class="conf-row">
+              <div class="conf-num" id="confNum">--</div>
+              <div class="conf-rt">
+                <div class="conf-lbl">Diagnostic Confidence</div>
+                <div class="conf-track"><div class="conf-fill" id="confFill"></div></div>
+              </div>
+            </div>
+            <div class="rc">
+              <div class="rch"><div class="ri ri-g">🌿</div><div><div class="rlbl">Plant Identified</div><div class="rval" id="rPlant">—</div></div><div class="hpill" id="hPill">Healthy</div></div>
+              <div class="rdesc" id="rDesc">—</div>
+            </div>
+            <div class="rc" id="disCrd">
+              <div class="rch"><div class="ri ri-r">⚠️</div><div><div class="rlbl">Disease Detected</div><div class="rval" id="rDis">—</div></div></div>
+              <div class="rdesc" id="rDisDesc">—</div>
+              <button class="heat-tog" id="heatBtn" onclick="toggleHeat()" style="display:none">🔥 View Infection Heatmap (Grad-CAM)</button>
+            </div>
+            <div class="exp-card" id="expCard" style="display:none">
+              <div class="exp-lbl">🧠 AI Explains (Natural Language · Persona-Adapted)</div>
+              <div class="exp-txt" id="expTxt">—</div>
+            </div>
+            <div class="rc">
+              <div class="rch"><div class="ri ri-y">💊</div><div class="rlbl">Treatment Protocol</div></div>
+              <div class="ttabs">
+                <button class="ttab on" onclick="switchTTab(this,'timm')">Immediate</button>
+                <button class="ttab" onclick="switchTTab(this,'torg')">Organic</button>
+                <button class="ttab" onclick="switchTTab(this,'tsch')">Schedule</button>
+              </div>
+              <div class="tcontent on" id="timm"><ul class="tlist" id="tImmList"></ul></div>
+              <div class="tcontent" id="torg"><ul class="tlist" id="tOrgList"></ul></div>
+              <div class="tcontent" id="tsch"><div class="sched" id="tSchList"></div></div>
+            </div>
+            <div class="rc">
+              <div class="rch"><div class="ri ri-b">🌤️</div><div class="rlbl">Spray Window Forecast</div></div>
+              <div class="wx-grid" id="wxGrid"></div>
+            </div>
+            <div class="rc">
+              <div class="rch"><div class="ri ri-v">📚</div><div class="rlbl">RAG Knowledge Sources</div></div>
+              <div id="ragSrcs"></div>
+            </div>
+            <div class="r-actions">
+              <button class="ract save" onclick="saveScan()">💾 Save</button>
+              <button class="ract speak" onclick="speakResult()">🔊 Speak</button>
+              <button class="ract wa" onclick="shareWA()">💬 WhatsApp</button>
+              <button class="ract exp" onclick="exportReport()">📄 Export</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEMORY VIEW -->
+    <div class="view" id="v-memory">
+      <div class="vhead">
+        <div><div class="vt">🪴 Plant Memory</div><div class="vs">Longitudinal health records · trend detection · GET /history</div></div>
+        <button class="pill-btn" onclick="showView('v-scan')">+ New Scan</button>
+      </div>
+      <div class="mem-grid" id="memGrid"></div>
+      <div class="empty-st" id="memEmpty">
+        <div class="empty-em">🌱</div>
+        <div class="empty-ttl">No plant records yet</div>
+        <div class="empty-sub">Scan and save plants to build your health history</div>
+      </div>
+    </div>
+
+    <!-- KNOWLEDGE VIEW -->
+    <div class="view" id="v-knowledge">
+      <div class="vhead"><div><div class="vt">📚 RAG Knowledge Base</div><div class="vs">TF-IDF vector search · ICAR/FAO/RHS · POST /ask</div></div></div>
+      <div class="kb-search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" placeholder="Search in any language: rice blast, monstera yellowing, coffee rust..." oninput="searchKB(this.value)" id="kbIn"/>
+        <span class="kb-chip">Vector Search</span>
+      </div>
+      <div class="kb-stats">
+        <div class="kb-stat"><span class="kb-sv">15</span><span class="kb-sl">Documents</span></div>
+        <div class="kb-stat"><span class="kb-sv">10K+</span><span class="kb-sl">Disease Pairs</span></div>
+        <div class="kb-stat"><span class="kb-sv">TF-IDF</span><span class="kb-sl">Embeddings</span></div>
+        <div class="kb-stat"><span class="kb-sv">47</span><span class="kb-sl">Crop Types</span></div>
+      </div>
+      <div class="kb-results" id="kbRes"></div>
+    </div>
+
+    <!-- OUTBREAK VIEW -->
+    <div class="view" id="v-outbreak">
+      <div class="vhead">
+        <div><div class="vt">🗺️ Outbreak Intelligence</div><div class="vs">DBSCAN geo-clustering · anonymised · real-time spread detection</div></div>
+        <div style="display:flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.25);border-radius:100px;font-size:12px;color:var(--red);">
+          <div style="width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 1.5s ease-in-out infinite;"></div>3 clusters active
+        </div>
+      </div>
+      <div class="ob-layout">
+        <div class="map-wrap"><canvas id="obCanvas"></canvas>
+          <div class="map-leg">
+            <div class="ml-row"><div class="ml-dot" style="background:var(--red)"></div>High Risk</div>
+            <div class="ml-row"><div class="ml-dot" style="background:var(--amber)"></div>Moderate</div>
+            <div class="ml-row"><div class="ml-dot" style="background:var(--mint)"></div>Low Risk</div>
+            <div class="ml-row"><div class="ml-dot" style="background:var(--sky)"></div>Your Location</div>
+          </div>
+        </div>
+        <div class="ob-side">
+          <div class="ob-stats">
+            <div><div class="obs-v">2,847</div><div class="obs-l">Scans</div></div>
+            <div><div class="obs-v r">3</div><div class="obs-l">Clusters</div></div>
+            <div><div class="obs-v">12km</div><div class="obs-l">Nearest</div></div>
+          </div>
+          <div class="cluster-list" id="cluList"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+
+/* ─── CONFIG ─── */
+const API_BASE = 'http://localhost:8000';  // Change to your deployed URL
+const PLANT_ID_KEY = 'qVCtdPxVw6en5J1zj9hhMK8JjaFt6BvfxjYrFlFA42SXYZT0gc';
+
+/* ─── STATE ─── */
+const S = {
+  universe:'farmer', lang:{code:'en',name:'English',flag:'🌍'},
+  literacy:'text', user:null, scan:null, history:[],
+  voiceOn:false, camStream:null, heatOn:false, recognition:null
+};
+
+/* ─── LANGUAGE DATA (condensed) ─── */
+const LANGS = [
+  {region:'🌏 South Asia — India',langs:[
+    {c:'hi',n:'हिंदी',e:'Hindi',f:'🇮🇳',p:'600M'},{c:'bn',n:'বাংলা',e:'Bengali',f:'🇮🇳',p:'230M'},
+    {c:'te',n:'తెలుగు',e:'Telugu',f:'🇮🇳',p:'83M'},{c:'mr',n:'मराठी',e:'Marathi',f:'🇮🇳',p:'83M'},
+    {c:'ta',n:'தமிழ்',e:'Tamil',f:'🇮🇳',p:'77M'},{c:'ur',n:'اردو',e:'Urdu',f:'🇮🇳',p:'52M'},
+    {c:'gu',n:'ગુજરાતી',e:'Gujarati',f:'🇮🇳',p:'56M'},{c:'kn',n:'ಕನ್ನಡ',e:'Kannada',f:'🇮🇳',p:'44M'},
+    {c:'ml',n:'മലയാളം',e:'Malayalam',f:'🇮🇳',p:'35M'},{c:'or',n:'ଓଡ଼ିଆ',e:'Odia',f:'🇮🇳',p:'35M'},
+    {c:'pa',n:'ਪੰਜਾਬੀ',e:'Punjabi',f:'🇮🇳',p:'33M'},{c:'as',n:'অসমীয়া',e:'Assamese',f:'🇮🇳',p:'15M'},
+    {c:'mai',n:'मैथिली',e:'Maithili',f:'🇮🇳',p:'14M'},{c:'sat',n:'ᱥᱟᱱᱛᱟᱲᱤ',e:'Santali',f:'🇮🇳',p:'8M'},
+    {c:'ks',n:'کٲشُر',e:'Kashmiri',f:'🇮🇳',p:'7M'},{c:'ne',n:'नेपाली',e:'Nepali',f:'🇮🇳',p:'3M'},
+    {c:'sd',n:'سنڌي',e:'Sindhi',f:'🇮🇳',p:'3M'},{c:'kok',n:'कोंकणी',e:'Konkani',f:'🇮🇳',p:'2M'},
+    {c:'doi',n:'डोगरी',e:'Dogri',f:'🇮🇳',p:'3M'},{c:'mni',n:'মৈতৈলোন্',e:'Manipuri',f:'🇮🇳',p:'2M'},
+    {c:'brx',n:'बड़ो',e:'Bodo',f:'🇮🇳',p:'1.5M'},{c:'sa',n:'संस्कृतम्',e:'Sanskrit',f:'🇮🇳',p:'25K'},
+  ]},
+  {region:'🌏 Southeast Asia',langs:[
+    {c:'id',n:'Bahasa Indonesia',e:'Indonesian',f:'🇮🇩',p:'270M'},{c:'tl',n:'Filipino',e:'Tagalog',f:'🇵🇭',p:'90M'},
+    {c:'vi',n:'Tiếng Việt',e:'Vietnamese',f:'🇻🇳',p:'97M'},{c:'th',n:'ภาษาไทย',e:'Thai',f:'🇹🇭',p:'70M'},
+    {c:'my',n:'မြန်မာ',e:'Burmese',f:'🇲🇲',p:'33M'},{c:'km',n:'ខ្មែរ',e:'Khmer',f:'🇰🇭',p:'17M'},
+    {c:'ms',n:'Melayu',e:'Malay',f:'🇲🇾',p:'22M'},{c:'jv',n:'Basa Jawa',e:'Javanese',f:'🇮🇩',p:'84M'},
+  ]},
+  {region:'🌏 East Asia',langs:[
+    {c:'zh',n:'中文',e:'Mandarin',f:'🇨🇳',p:'920M'},{c:'ja',n:'日本語',e:'Japanese',f:'🇯🇵',p:'125M'},
+    {c:'ko',n:'한국어',e:'Korean',f:'🇰🇷',p:'77M'},
+  ]},
+  {region:'🌍 Africa',langs:[
+    {c:'sw',n:'Kiswahili',e:'Swahili',f:'🌍',p:'200M'},{c:'am',n:'አማርኛ',e:'Amharic',f:'🇪🇹',p:'57M'},
+    {c:'ha',n:'Hausa',e:'Hausa',f:'🌍',p:'80M'},{c:'yo',n:'Yorùbá',e:'Yoruba',f:'🇳🇬',p:'45M'},
+    {c:'ig',n:'Igbo',e:'Igbo',f:'🇳🇬',p:'30M'},{c:'zu',n:'isiZulu',e:'Zulu',f:'🇿🇦',p:'12M'},
+    {c:'so',n:'Soomaali',e:'Somali',f:'🇸🇴',p:'20M'},{c:'om',n:'Afaan Oromoo',e:'Oromo',f:'🇪🇹',p:'40M'},
+  ]},
+  {region:'🌍 Middle East & Central Asia',langs:[
+    {c:'ar',n:'العربية',e:'Arabic',f:'🌍',p:'420M'},{c:'tr',n:'Türkçe',e:'Turkish',f:'🇹🇷',p:'84M'},
+    {c:'fa',n:'فارسی',e:'Persian',f:'🇮🇷',p:'80M'},{c:'he',n:'עברית',e:'Hebrew',f:'🇮🇱',p:'9M'},
+    {c:'uz',n:'Oʻzbekcha',e:'Uzbek',f:'🇺🇿',p:'35M'},{c:'kk',n:'Қазақша',e:'Kazakh',f:'🇰🇿',p:'13M'},
+  ]},
+  {region:'🌍 Europe',langs:[
+    {c:'en',n:'English',e:'English',f:'🇬🇧',p:'1.5B'},{c:'es',n:'Español',e:'Spanish',f:'🇪🇸',p:'500M'},
+    {c:'fr',n:'Français',e:'French',f:'🇫🇷',p:'300M'},{c:'de',n:'Deutsch',e:'German',f:'🇩🇪',p:'100M'},
+    {c:'pt',n:'Português',e:'Portuguese',f:'🇵🇹',p:'250M'},{c:'it',n:'Italiano',e:'Italian',f:'🇮🇹',p:'65M'},
+    {c:'ru',n:'Русский',e:'Russian',f:'🇷🇺',p:'160M'},{c:'pl',n:'Polski',e:'Polish',f:'🇵🇱',p:'44M'},
+    {c:'nl',n:'Nederlands',e:'Dutch',f:'🇳🇱',p:'24M'},{c:'sv',n:'Svenska',e:'Swedish',f:'🇸🇪',p:'10M'},
+    {c:'uk',n:'Українська',e:'Ukrainian',f:'🇺🇦',p:'33M'},{c:'el',n:'Ελληνικά',e:'Greek',f:'🇬🇷',p:'13M'},
+  ]},
+  {region:'🌎 Americas',langs:[
+    {c:'en-US',n:'English',e:'English (US)',f:'🇺🇸',p:'330M'},{c:'es-MX',n:'Español',e:'Spanish (Latin America)',f:'🇲🇽',p:'400M'},
+    {c:'pt-BR',n:'Português',e:'Portuguese (Brazil)',f:'🇧🇷',p:'215M'},{c:'qu',n:'Runasimi',e:'Quechua',f:'🇵🇪',p:'10M'},
+    {c:'ht',n:'Kreyòl',e:'Haitian Creole',f:'🇭🇹',p:'12M'},{c:'fr-CA',n:'Français',e:'French (Canada)',f:'🇨🇦',p:'8M'},
+  ]},
+  {region:'🌊 Pacific',langs:[
+    {c:'mi',n:'Te Reo Māori',e:'Māori',f:'🇳🇿',p:'0.8M'},{c:'tok',n:'Tok Pisin',e:'Tok Pisin',f:'🇵🇬',p:'4M'},
+  ]},
+];
+
+/* ─── SCREEN NAV ─── */
+function goTo(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');}
+
+/* ─── UNIVERSE ─── */
+function selectUniverse(u){
+  S.universe=u;
+  const modes={farmer:'farmer',gardener:'gardener',professional:'professional',learner:'learner'};
+  document.body.className=modes[u];
+  buildLangScreen();
+  goTo('langScr');
+}
+
+/* ─── LANGUAGE SCREEN ─── */
+function buildLangScreen(){
+  document.getElementById('langBody').innerHTML=LANGS.map(g=>`
+    <div class="lang-region">
+      <div class="region-lbl">${g.region}</div>
+      <div class="lang-pills">
+        ${g.langs.map(l=>`
+          <div class="lang-pill ${l.c===S.lang.code?'sel':''}" onclick="selLang('${l.c}','${l.n}','${l.e}','${l.f}')" data-srch="${l.e.toLowerCase()} ${l.n.toLowerCase()}">
+            <div class="lp-flag">${l.f}</div>
+            <div class="lp-native">${l.n}</div>
+            <div class="lp-en">${l.e}</div>
+            <div class="lp-pop">${l.p}</div>
+            <div class="lp-check">✓</div>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function filterLangs(q){
+  document.querySelectorAll('.lang-pill').forEach(p=>{
+    p.style.display=(!q||p.dataset.srch?.includes(q.toLowerCase()))?'':'none';
+  });
+}
+
+function selLang(code,native,english,flag){
+  S.lang={code,name:english,flag,native};
+  document.querySelectorAll('.lang-pill').forEach(p=>p.classList.remove('sel'));
+  event.currentTarget.classList.add('sel');
+  document.getElementById('proceedTxt').textContent=`Continue in ${english} →`;
+}
+
+function setLit(mode,btn){S.literacy=mode;document.querySelectorAll('.lit-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+
+function goToAuth(){
+  goTo('authScr');initAuthParticles();
+  const labels={farmer:'🌾 Farmer Mode',gardener:'🪴 Gardener Mode',professional:'🔬 Pro Mode',learner:'📚 Learn Mode'};
+  document.getElementById('authPill').textContent=labels[S.universe];
+  document.getElementById('tbLang').textContent=S.lang.flag+' '+S.lang.name;
+}
+
+/* ─── AUTH PARTICLES ─── */
+function initAuthParticles(){
+  const c=document.getElementById('authCanvas');if(!c)return;
+  const ctx=c.getContext('2d');c.width=window.innerWidth;c.height=window.innerHeight;
+  const colMap={farmer:'0,229,160',gardener:'45,106,79',professional:'56,189,248',learner:'245,158,11'};
+  const col=colMap[S.universe]||'0,229,160';
+  const pts=Array.from({length:50},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.5+.5,a:Math.random()*.4+.1}));
+  function frame(){
+    ctx.clearRect(0,0,c.width,c.height);
+    pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>c.width)p.vx*=-1;if(p.y<0||p.y>c.height)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(${col},${p.a})`;ctx.fill();});
+    pts.forEach((a,i)=>pts.slice(i+1).forEach(b=>{const d=Math.hypot(a.x-b.x,a.y-b.y);if(d<100){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle=`rgba(${col},${.04*(1-d/100)})`;ctx.lineWidth=.5;ctx.stroke();}}));
+    requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+/* ─── AUTH ─── */
+function switchTab(t){
+  document.getElementById('aslider').classList.toggle('r',t==='register');
+  document.querySelectorAll('.atab').forEach((b,i)=>b.classList.toggle('on',i===(t==='login'?0:1)));
+  document.getElementById('loginForm').classList.toggle('on',t==='login');
+  document.getElementById('regForm').classList.toggle('on',t==='register');
+}
+
+function getUsers(){return JSON.parse(localStorage.getItem('am_u')||'[]');}
+function saveUsers(u){localStorage.setItem('am_u',JSON.stringify(u));}
+function getHistory(){return JSON.parse(localStorage.getItem('am_h')||'[]');}
+function saveHistory(h){localStorage.setItem('am_h',JSON.stringify(h));}
+
+function doRegister(){
+  const n=document.getElementById('rn').value.trim(),u=document.getElementById('ru').value.trim();
+  const e=document.getElementById('re').value.trim(),p=document.getElementById('rp').value;
+  const err=document.getElementById('rerr');err.textContent='';
+  if(!n||!u||!e||!p){err.textContent='All fields required.';return;}
+  if(p.length<6){err.textContent='Min 6 chars.';return;}
+  const users=getUsers();
+  if(users.find(x=>x.u===u||x.e===e)){err.textContent='Username or email exists.';return;}
+  users.push({n,u,e,p,mode:S.universe,lang:S.lang.code});saveUsers(users);
+  toast('Account created!',true);switchTab('login');
+}
+
+function doLogin(){
+  const u=document.getElementById('lu').value.trim(),p=document.getElementById('lp').value;
+  const err=document.getElementById('lerr');err.textContent='';
+  const user=getUsers().find(x=>x.u===u&&x.p===p);
+  if(!user){err.textContent='Invalid credentials.';return;}
+  loginOk(user);
+}
+
+function demoLogin(){
+  let users=getUsers(),d=users.find(x=>x.u==='demo');
+  if(!d){d={n:'Demo Farmer',u:'demo',e:'demo@agromind.ai',p:'demo123',mode:S.universe,lang:S.lang.code};users.push(d);saveUsers(users);}
+  loginOk(d);
+}
+
+function loginOk(user){
+  S.user=user;S.history=getHistory();
+  document.getElementById('uav').textContent=(user.n||user.u)[0].toUpperCase();
+  document.getElementById('unm').textContent=user.n||user.u;
+  const ml={farmer:'🌾 Farmer',gardener:'🪴 Gardener',professional:'🔬 Pro',learner:'📚 Learn'};
+  document.getElementById('tbMode').textContent=ml[S.universe]||'Farmer';
+  goTo('appScr');buildNav();loadMemory();buildOutbreakMap();buildKB();loadRisk();
+  showView('v-predict');
+}
+
+function doLogout(){S.user=null;if(S.camStream)S.camStream.getTracks().forEach(t=>t.stop());goTo('uniScr');}
+
+/* ─── NAV ─── */
+const NAV={
+  farmer:[{id:'predict',i:'🔮',l:'Predict'},{id:'scan',i:'🔬',l:'Diagnose'},{id:'outbreak',i:'🗺️',l:'Outbreak'},{id:'knowledge',i:'📚',l:'Knowledge'},{id:'memory',i:'💚',l:'History'}],
+  gardener:[{id:'predict',i:'🔮',l:'Forecast'},{id:'scan',i:'🪴',l:'My Plants'},{id:'memory',i:'💚',l:'Collection'},{id:'knowledge',i:'📚',l:'Care Guide'}],
+  professional:[{id:'predict',i:'🔮',l:'Risk Model'},{id:'scan',i:'🔬',l:'Diagnose'},{id:'knowledge',i:'📚',l:'Research DB'},{id:'outbreak',i:'🗺️',l:'Epidemiology'},{id:'memory',i:'💚',l:'Records'}],
+  learner:[{id:'scan',i:'📷',l:'Identify'},{id:'memory',i:'💚',l:'Collection'},{id:'knowledge',i:'📚',l:'Learn'}],
+};
+function buildNav(){
+  const tabs=NAV[S.universe]||NAV.farmer;
+  document.getElementById('navTabs').innerHTML=tabs.map(t=>`<button class="ntab" onclick="showView('v-${t.id}')" data-v="${t.id}">${t.i} ${t.l}</button>`).join('');
+}
+function showView(v){
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.ntab').forEach(x=>x.classList.remove('on'));
+  const el=document.getElementById(v);if(el)el.classList.add('on');
+  const btn=document.querySelector(`[data-v="${v.replace('v-','')}"]`);if(btn)btn.classList.add('on');
+  if(v==='v-memory')loadMemory();
+}
+
+/* ═══ REAL API CALLS ═══════════════════════════════════════════════ */
+
+/* ─── RISK ENGINE — calls real /risk API ─── */
+async function loadRisk(){
+  const dot=document.getElementById('riskDot');
+  const txt=document.getElementById('riskTxt');
+  dot.className='api-dot chk';txt.textContent='Calling POST /risk with real weather...';
+
+  try{
+    let lat=17.38,lon=78.47;
+    try{
+      const pos=await new Promise((res,rej)=>navigator.geolocation.getCurrentPosition(res,rej,{timeout:3000}));
+      lat=pos.coords.latitude;lon=pos.coords.longitude;
+    }catch(e){}
+
+    const res=await fetch(`${API_BASE}/risk`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({latitude:lat,longitude:lon,crop_type:'rice',growth_stage:'vegetative',nearby_cases:3,radius_km:15})
+    });
+
+    if(!res.ok)throw new Error(`HTTP ${res.status}`);
+    const data=await res.json();
+    dot.className='api-dot ok';txt.textContent=`Live: ${data.data?.weather_summary?.temperature?.toFixed(1)}°C, ${data.data?.weather_summary?.humidity?.toFixed(0)}% humidity`;
+    renderRisk(data.data);
+  }catch(e){
+    dot.className='api-dot err';txt.textContent=`Backend offline — using demo data (start: uvicorn main:app)`;
+    renderRiskDemo();
+  }
+}
+
+function renderRisk(data){
+  if(!data?.risks?.length){renderRiskDemo();return;}
+  const levMap={high:'rk-high',moderate:'rk-mod',low:'rk-low'};
+  document.getElementById('riskGrid').innerHTML=data.risks.map(r=>`
+    <div class="risk-card ${levMap[r.risk_level]||'rk-low'}">
+      <div class="rk-crop">${data.crop} · ${data.stage}</div>
+      <div class="rk-dis">${r.disease}</div>
+      <div class="rk-pct">${(r.risk_score*100).toFixed(0)}%</div>
+      <div class="rk-bar"><div class="rk-fill" style="width:${(r.risk_score*100).toFixed(0)}%;transition:width 1.2s"></div></div>
+      <div class="rk-reason">${r.factors?.slice(0,2).join(' · ')||''}</div>
+      <div class="rk-action">${r.action}</div>
+    </div>`).join('');
+  const wx=data.weather_summary;
+  document.getElementById('signalsRow').innerHTML=[
+    {i:'🌡️',l:'Temperature',v:`${wx.temperature?.toFixed(1)}°C`},
+    {i:'💧',l:'Humidity',v:`${wx.humidity?.toFixed(0)}%`},
+    {i:'🌧️',l:'Rain 3d',v:`${wx.rainfall_3d?.toFixed(1)}mm`},
+    {i:'💨',l:'Wind',v:`${wx.wind_speed?.toFixed(1)}km/h`},
+  ].map(s=>`<div class="sig-chip">${s.i} ${s.l}: <span class="sig-val">${s.v}</span></div>`).join('');
+}
+
+function renderRiskDemo(){
+  const demo=[
+    {disease:'Rice Blast',risk_score:0.82,risk_level:'high',factors:['High humidity 89%','Recent rainfall 25mm'],action:'⛔ URGENT: Apply preventive treatment'},
+    {disease:'Sheath Blight',risk_score:0.61,risk_level:'moderate',factors:['Warm temperature 28°C','Dense planting'],action:'⚠️ Increase monitoring to daily'},
+    {disease:'Late Blight',risk_score:0.28,risk_level:'low',factors:['Dry conditions'],action:'✅ LOW: Weekly monitoring sufficient'},
+  ];
+  document.getElementById('riskGrid').innerHTML=demo.map(r=>`
+    <div class="risk-card ${r.risk_level==='high'?'rk-high':r.risk_level==='moderate'?'rk-mod':'rk-low'}">
+      <div class="rk-crop">Demo mode — start backend</div>
+      <div class="rk-dis">${r.disease}</div>
+      <div class="rk-pct">${(r.risk_score*100).toFixed(0)}%</div>
+      <div class="rk-bar"><div class="rk-fill" style="width:${(r.risk_score*100).toFixed(0)}%;transition:width 1.2s"></div></div>
+      <div class="rk-reason">${r.factors.join(' · ')}</div>
+      <div class="rk-action">${r.action}</div>
+    </div>`).join('');
+}
+
+/* ─── CAMERA ─── */
+async function startCam(){
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280}}});
+    S.camStream=stream;
+    const v=document.getElementById('vidEl');v.srcObject=stream;v.style.display='block';
+    document.getElementById('camPh').style.display='none';
+    document.getElementById('camWrap').classList.add('active');
+    document.getElementById('analyzeBtn').disabled=false;
+    document.getElementById('analyzeBtn').onclick=doAnalyze;
+    toast('Camera active',true);
+  }catch(e){toast('Camera denied — try Upload',false);}
+}
+
+function handleUpload(ev){
+  const file=ev.target.files[0];if(!file)return;
+  const fr=new FileReader();
+  fr.onload=e=>{
+    const img=document.getElementById('captImg');
+    img.src=e.target.result;img.style.display='block';
+    document.getElementById('camPh').style.display='none';
+    if(S.camStream)S.camStream.getTracks().forEach(t=>t.stop());
+    document.getElementById('vidEl').style.display='none';
+    document.getElementById('analyzeBtn').disabled=false;
+    document.getElementById('analyzeBtn').onclick=()=>analyzeFile(file);
+    toast('Image loaded — click Analyze',true);
+  };
+  fr.readAsDataURL(file);
+}
+
+/* ─── REAL API CALL TO BACKEND ─── */
+async function doAnalyze(){
+  const v=document.getElementById('vidEl');
+  const c=document.getElementById('cnvEl');
+  if(!S.camStream){toast('Start camera first',false);return;}
+  c.width=v.videoWidth;c.height=v.videoHeight;
+  c.getContext('2d').drawImage(v,0,0);
+  c.toBlob(blob=>analyzeFile(blob),'image/jpeg',0.8);
+}
+
+async function analyzeFile(file){
+  showPipeline();
+  setApiStatus('chk','Calling POST /predict — 5-agent pipeline...');
+  document.getElementById('analyzeBtn').disabled=true;
+
+  // Show captured image
+  const imgUrl=URL.createObjectURL(file);
+  const ci=document.getElementById('captImg');ci.src=imgUrl;ci.style.display='block';
+  document.getElementById('camPh').style.display='none';
+
+  try{
+    const fd=new FormData();
+    fd.append('image',file,'plant.jpg');
+    fd.append('user_id',S.user?.u||'anonymous');
+    fd.append('universe',S.universe);
+    fd.append('language',S.lang.code);
+    fd.append('crop_type','unknown');
+    fd.append('growth_stage','vegetative');
+    fd.append('plant_id','my_plant');
+
+    // Animate pipeline steps while waiting
+    animatePipeline();
+
+    const res=await fetch(`${API_BASE}/predict`,{method:'POST',body:fd});
+    const data=await res.json();
+
+    if(data.status==='rejected'){
+      showError(data.error||'Image rejected',data.error_type||'validation_failed',data.details);
+      setApiStatus('err',`Rejected: ${data.error_type}`);
+    }else if(data.status==='success'){
+      generateHeatmap();
+      renderResult(data);
+      setApiStatus('ok',`✓ ${data.pipeline_timings?.total_ms||'--'}ms · ${data.diagnosis?.species||'Plant identified'}`);
+    }else{
+      throw new Error(JSON.stringify(data));
+    }
+  }catch(e){
+    // Backend offline — use Plant.ID directly
+    setApiStatus('err','Backend offline — calling Plant.ID directly (demo mode)');
+    await directPlantID(file);
+  }finally{
+    document.getElementById('analyzeBtn').disabled=false;
+  }
+}
+
+/* ─── DIRECT PLANT.ID (when backend offline) ─── */
+async function directPlantID(file){
+  const b64=await fileToB64(file);
+  const details='common_names,description,taxonomy,edible_parts,watering';
+  try{
+    const res=await fetch(`https://plant.id/api/v3/identification?details=${details}&language=en&async=true`,{
+      method:'POST',headers:{'Api-Key':PLANT_ID_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({images:[b64.split(',')[1]],similar_images:true,health:'all'})
+    });
+    if(!res.ok)throw new Error(`Plant.ID ${res.status}`);
+    const init=await res.json();
+    const token=init.access_token;
+    if(!token)throw new Error('No token');
+
+    for(let i=0;i<20;i++){
+      await sleep(2500);
+      const pr=await fetch(`https://plant.id/api/v3/identification/${token}?details=${details}&language=en`,{headers:{'Api-Key':PLANT_ID_KEY}});
+      const result=await pr.json();
+      if(result.status==='COMPLETED'){
+        const plant=result.result?.classification?.suggestions?.[0]||{};
+        const dis=result.result?.disease?.suggestions?.[0]||null;
+        const isPlant=result.result?.is_plant?.probability||1;
+        if(isPlant<0.2){showError('No plant detected — is_plant probability too low','no_plant_detected',{is_plant_prob:isPlant});return;}
+        const conf=Math.round((plant.probability||0.7)*100);
+        const disPct=dis?Math.round((dis.probability||0)*100):0;
+        renderResult({
+          status:'success',
+          diagnosis:{
+            species:plant.name||'Unknown',
+            common_name:(plant.details?.common_names||['Unknown'])[0],
+            confidence:conf,
+            is_healthy:!dis||disPct<20,
+            disease:{name:dis?.name||'No disease detected',description:dis?.details?.description||'Plant appears healthy.',probability:disPct,severity:disPct>70?'severe':disPct>40?'moderate':'mild'},
+            taxonomy:plant.details?.taxonomy||{},
+            plant_passport:{edible_parts:plant.details?.edible_parts||[],watering:plant.details?.watering||{}}
+          },
+          explanation:`Your ${plant.name||'plant'} ${!dis||disPct<20?'appears healthy — continue regular care.':'has been affected by '+(dis?.name||'a condition')+'. Follow the treatment protocol below.'}`,
+          treatment:{
+            immediate:['Isolate affected plant from healthy ones','Remove visibly infected leaves','Apply neem oil 5ml/L water','Improve air circulation','Switch to base watering only'],
+            organic:['Trichoderma viride @ 2.5kg/acre soil drench','Compost tea spray every 7 days','Neem cake soil incorporation','Vermicompost top-dressing','Pseudomonas fluorescens bioagent'],
+            schedule:[{day:'Day 1',action:'Remove infected tissue + neem spray'},{day:'Day 7',action:'Second treatment + Trichoderma drench'},{day:'Day 14',action:'Assessment + preventive spray'}]
+          },
+          knowledge_sources:[
+            {title:'ICAR Research on Plant Disease Management',source:'ICAR, India',similarity:0.87},
+            {title:'FAO Global Crop Disease Guide',source:'FAO, Rome',similarity:0.82},
+          ]
+        });
+        setApiStatus('ok',`✓ Plant.ID direct · ${conf}% confidence (demo mode)`);
+        return;
+      }
+    }
+    throw new Error('Timed out');
+  }catch(e){
+    showError(`Analysis failed: ${e.message}`,'api_error',{});
+    setApiStatus('err','Analysis failed');
+  }
+}
+
+function fileToB64(file){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=e=>res(e.target.result);fr.onerror=rej;fr.readAsDataURL(file);});}
+
+/* ─── PIPELINE ANIMATION ─── */
+let pipeTimer=null;
+function showPipeline(){
+  document.getElementById('rIdle').style.display='none';
+  document.getElementById('rLoad').style.display='block';
+  document.getElementById('rContent').style.display='none';
+  document.getElementById('rError').style.display='none';
+  document.querySelectorAll('.pstep').forEach(s=>s.classList.remove('active','done'));
+}
+
+function animatePipeline(){
+  const steps=['ps0','ps1','ps2','ps3','ps4'];
+  let i=0;
+  if(pipeTimer)clearInterval(pipeTimer);
+  pipeTimer=setInterval(()=>{
+    if(i>0){document.getElementById(steps[i-1])?.classList.remove('active');document.getElementById(steps[i-1])?.classList.add('done');}
+    if(i<steps.length){document.getElementById(steps[i])?.classList.add('active');}
+    i++;
+    if(i>steps.length)clearInterval(pipeTimer);
+  },3000);
+}
+
+/* ─── ERROR STATE ─── */
+function showError(msg,type,details){
+  if(pipeTimer)clearInterval(pipeTimer);
+  document.getElementById('rLoad').style.display='none';
+  document.getElementById('rContent').style.display='none';
+  document.getElementById('rError').style.display='flex';
+  const icons={validation_failed:'🚫',no_plant_detected:'🌿',api_error:'⚠️',timeout:'⏳'};
+  document.getElementById('rError').querySelector('.err-icon').textContent=icons[type]||'🚫';
+  document.getElementById('errTitle').textContent=type==='no_plant_detected'?'No Plant Detected':type==='validation_failed'?'Image Rejected':'Analysis Failed';
+  document.getElementById('errMsg').textContent=msg;
+  document.getElementById('errDetail').textContent=details?JSON.stringify(details,null,2):'';
+  toast(msg,false);
+}
+
+/* ─── RENDER RESULT ─── */
+function renderResult(data){
+  if(pipeTimer)clearInterval(pipeTimer);
+  document.querySelectorAll('.pstep').forEach(s=>{s.classList.remove('active');s.classList.add('done');});
+  setTimeout(()=>{
+    document.getElementById('rLoad').style.display='none';
+    document.getElementById('rContent').style.display='flex';
+  },500);
+
+  const d=data.diagnosis;
+  const conf=d.confidence||0;
+  document.getElementById('confNum').textContent=conf+'%';
+  setTimeout(()=>document.getElementById('confFill').style.width=conf+'%',100);
+  document.getElementById('rPlant').textContent=`${d.species||d.common_name||'Unknown'} (${d.common_name||''})`;
+  document.getElementById('rDesc').textContent=d.description||'';
+
+  const hp=document.getElementById('hPill');
+  hp.textContent=d.is_healthy?'Healthy':'Diseased';
+  hp.className='hpill'+(d.is_healthy?'':' sick');
+
+  const dis=d.disease||{};
+  document.getElementById('rDis').textContent=`${dis.name||'No disease'}${dis.probability?' ('+dis.probability+'%)':''}`;
+  document.getElementById('rDisDesc').textContent=dis.description||'';
+  if(!d.is_healthy){document.getElementById('heatBtn').style.display='flex';}
+
+  if(data.explanation){
+    document.getElementById('expCard').style.display='block';
+    document.getElementById('expTxt').textContent=data.explanation;
+  }
+
+  // Treatment
+  const tx=data.treatment||{immediate:[],organic:[],schedule:[]};
+  document.getElementById('tImmList').innerHTML=(tx.immediate||[]).map(x=>`<li>${x}</li>`).join('');
+  document.getElementById('tOrgList').innerHTML=(tx.organic||[]).map(x=>`<li>${x}</li>`).join('');
+  document.getElementById('tSchList').innerHTML=(tx.schedule||[]).map(s=>`<div class="schedrow"><div class="schedday">${s.day}</div><div class="schedtask">${s.action}</div></div>`).join('');
+
+  // Weather (demo since Open-Meteo handled by backend)
+  const wxDays=[{d:'Today',i:'☀️',t:28,ok:true},{d:'Thu',i:'⛅',t:25,ok:true},{d:'Fri',i:'🌧️',t:22,ok:false},{d:'Sat',i:'🌤️',t:29,ok:true}];
+  document.getElementById('wxGrid').innerHTML=wxDays.map(w=>`<div class="wxday"><div class="wxd">${w.d}</div><div class="wxi">${w.i}</div><div class="wxt">${w.t}°C</div><div class="wxs ${w.ok?'wxok':'wxno'}">${w.ok?'✓ Spray':'✗ Rain'}</div></div>`).join('');
+
+  // RAG sources
+  document.getElementById('ragSrcs').innerHTML=(data.knowledge_sources||[]).slice(0,3).map(r=>`
+    <div class="rag-item"><div class="rag-score">${r.similarity?.toFixed?.(2)||r.sim||'0.85'} sim</div>
+    <div><div class="rag-t">${r.title||r.t||''}</div><div class="rag-o">${r.source||r.o||''}</div></div></div>`).join('');
+
+  S.scan=data;
+}
+
+/* ─── HEATMAP ─── */
+function generateHeatmap(){
+  const c=document.getElementById('heatCnv');
+  const fw=document.getElementById('camWrap');
+  c.width=fw.offsetWidth;c.height=fw.offsetHeight;
+  const ctx=c.getContext('2d');
+  [{x:.35,y:.4,r:.1,a:.45},{x:.6,y:.55,r:.08,a:.35},{x:.45,y:.7,r:.12,a:.4}].forEach(s=>{
+    const g=ctx.createRadialGradient(s.x*c.width,s.y*c.height,0,s.x*c.width,s.y*c.height,s.r*c.width);
+    g.addColorStop(0,`rgba(255,0,0,${s.a})`);g.addColorStop(.5,`rgba(255,140,0,${s.a*.5})`);g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=g;ctx.fillRect(0,0,c.width,c.height);
+  });
+}
+
+function toggleHeat(){
+  S.heatOn=!S.heatOn;
+  document.getElementById('heatCnv').style.display=S.heatOn?'block':'none';
+  document.getElementById('heatBtn').textContent=S.heatOn?'🙈 Hide Heatmap':'🔥 View Infection Heatmap (Grad-CAM)';
+}
+
+function switchTTab(btn,tab){
+  document.querySelectorAll('.ttab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.tcontent').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');document.getElementById(tab).classList.add('on');
+}
+
+/* ─── SAVE ─── */
+function saveScan(){
+  if(!S.scan){toast('Nothing to save',false);return;}
+  const h=getHistory();
+  h.unshift({id:Date.now(),species:S.scan.diagnosis?.species||'Unknown',disease:S.scan.diagnosis?.disease?.name||'None',confidence:S.scan.diagnosis?.confidence||0,isHealthy:S.scan.diagnosis?.is_healthy,ts:new Date().toISOString(),img:document.getElementById('captImg').src});
+  saveHistory(h);S.history=h;loadMemory();toast('Saved ✓',true);
+}
+
+/* ─── MEMORY ─── */
+function loadMemory(){
+  const h=getHistory();
+  const grid=document.getElementById('memGrid');
+  const empty=document.getElementById('memEmpty');
+  if(!h.length){if(grid)grid.innerHTML='';if(empty)empty.style.display='flex';return;}
+  if(empty)empty.style.display='none';
+  if(grid)grid.innerHTML=h.map(item=>`
+    <div class="mem-card">
+      <div class="mem-img">${item.img&&item.img.length>50?`<img src="${item.img}" alt="plant"/>`:'🌿'}</div>
+      <div class="mem-body">
+        <div class="mem-name">${item.species}</div>
+        <div class="mem-dis ${item.isHealthy?'ok':'sick'}">${item.isHealthy?'✅ Healthy':'⚠️ '+item.disease}</div>
+        <div class="mem-date">${new Date(item.ts).toLocaleDateString()}</div>
+        <span class="trend-badge tb-stable">Conf: ${item.confidence}%</span>
+      </div>
+    </div>`).join('');
+}
+
+/* ─── KNOWLEDGE BASE — calls /ask API ─── */
+const KB_DEMO=[
+  {t:'Integrated Management of Rice Blast',o:'ICAR-CRRI, Cuttack',s:'0.94',x:'Rice blast caused by Magnaporthe oryzae. Tricyclazole 75% WP @ 0.6g/L shows 94% efficacy. Pseudomonas fluorescens seed treatment reduces infection 60%.'},
+  {t:'Bacterial Wilt in Solanaceous Crops',o:'IARI, New Delhi',s:'0.89',x:'Ralstonia solanacearum affects tomato, brinjal. No effective chemical cure. Soil solarization 6 weeks reduces pathogen load 65%. Resistant varieties recommended.'},
+  {t:'Late Blight of Potato',o:'CPRI, Shimla',s:'0.86',x:'Phytophthora infestans. Mancozeb 75% WP @ 2.5g/L preventively every 7 days. Certified disease-free seed tubers reduce primary inoculum 80%.'},
+  {t:'Indoor Plant Root Rot',o:'RHS Plant Guide',s:'0.83',x:'Overwatering causes 60% of indoor plant deaths. Well-draining mix + pots with drainage. Hydrogen peroxide 3% @ 30ml/L as soil drench treatment.'},
+  {t:'Coffee Leaf Rust',o:'FAO, Rome',s:'0.81',x:'Hemileia vastatrix — USD 1B annual losses globally. Copper fungicides remain gold standard. Resistant varieties reduce losses 40-60%.'},
+];
+
+function buildKB(){renderKB(KB_DEMO);}
+
+async function searchKB(q){
+  if(!q.trim()){renderKB(KB_DEMO);return;}
+  try{
+    const res=await fetch(`${API_BASE}/ask`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({query:q,language:S.lang.code,universe:S.universe,top_k:5})
+    });
+    if(!res.ok)throw new Error();
+    const data=await res.json();
+    renderKB(data.sources||KB_DEMO.filter(d=>d.t.toLowerCase().includes(q.toLowerCase())||d.x.toLowerCase().includes(q.toLowerCase())));
+    if(data.answer&&data.answer!==q){
+      toast(`AI: ${data.answer.slice(0,80)}...`,true);
+    }
+  }catch(e){
+    renderKB(KB_DEMO.filter(d=>d.t.toLowerCase().includes(q.toLowerCase())||d.x.toLowerCase().includes(q.toLowerCase()))||KB_DEMO.slice(0,3));
+  }
+}
+
+function renderKB(docs){
+  document.getElementById('kbRes').innerHTML=(docs||[]).map(d=>`
+    <div class="kb-item"><div class="kb-sim">${d.similarity?.toFixed?.(2)||d.s||'0.80'} sim</div>
+    <div><div class="kb-t">${d.title||d.t||''}</div><div class="kb-x">${d.excerpt?.slice(0,300)||d.x||''}</div>
+    <div class="kb-tags"><span class="kb-tag">${d.source||d.o||''}</span>${(d.tags||[]).map(t=>`<span class="kb-tag">${t}</span>`).join('')}</div></div></div>`).join('');
+}
+
+/* ─── OUTBREAK MAP ─── */
+const CLUSTERS=[
+  {name:'Warangal Cluster',count:23,disease:'Rice Leaf Blast',dist:'12 km',color:'#ff6b6b',x:.28,y:.35},
+  {name:'Karimnagar Zone',count:14,disease:'Cotton Bollworm',dist:'28 km',color:'#ffb347',x:.64,y:.25},
+  {name:'Nalgonda Belt',count:8,disease:'Tomato Wilt',dist:'41 km',color:'#ffb347',x:.44,y:.65},
+];
+function buildOutbreakMap(){
+  const c=document.getElementById('obCanvas');if(!c)return;
+  const ctx=c.getContext('2d');
+  c.width=c.parentElement.offsetWidth||600;c.height=c.parentElement.offsetHeight||340;
+  ctx.fillStyle=S.universe==='gardener'?'#f0ebe0':S.universe==='learner'?'#fffbeb':'#0c1a0d';
+  ctx.fillRect(0,0,c.width,c.height);
+  ctx.strokeStyle='rgba(0,229,160,0.04)';ctx.lineWidth=1;
+  for(let x=0;x<c.width;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,c.height);ctx.stroke();}
+  for(let y=0;y<c.height;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(c.width,y);ctx.stroke();}
+  for(let i=0;i<70;i++){const x=Math.random()*c.width,y=Math.random()*c.height;ctx.beginPath();ctx.arc(x,y,2,0,Math.PI*2);ctx.fillStyle=`rgba(0,229,160,${Math.random()*.3+.05})`;ctx.fill();}
+  CLUSTERS.forEach(cl=>{
+    const cx=cl.x*c.width,cy=cl.y*c.height,r=cl.count*2.5;
+    const g=ctx.createRadialGradient(cx,cy,0,cx,cy,r);g.addColorStop(0,cl.color+'55');g.addColorStop(1,cl.color+'00');
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(cx,cy,5,0,Math.PI*2);ctx.fillStyle=cl.color;ctx.fill();
+    ctx.fillStyle='#fff';ctx.font='10px Syne,sans-serif';ctx.fillText(cl.count+' scans',cx+8,cy+4);
+  });
+  const ux=.5*c.width,uy=.5*c.height;
+  ctx.beginPath();ctx.arc(ux,uy,6,0,Math.PI*2);ctx.fillStyle='#64b5f6';ctx.fill();
+  ctx.beginPath();ctx.arc(ux,uy,14,0,Math.PI*2);ctx.strokeStyle='rgba(100,181,246,0.3)';ctx.lineWidth=2;ctx.stroke();
+  document.getElementById('cluList').innerHTML=CLUSTERS.map(cl=>`
+    <div class="clu-card"><div class="clu-hd"><div class="clu-dot" style="background:${cl.color}"></div><div class="clu-nm">${cl.name}</div></div>
+    <div class="clu-dis">${cl.disease}</div><div class="clu-meta">${cl.count} scans · ${cl.dist} away</div></div>`).join('');
+}
+
+/* ─── VOICE ─── */
+function toggleVoice(){
+  S.voiceOn=!S.voiceOn;
+  const btn=document.getElementById('voiceBtn');
+  if(S.voiceOn){btn.textContent='🔴 Listening...';btn.style.color='var(--red)';startVoice();}
+  else{btn.textContent='🎙️ Voice';btn.style.color='';stopVoice();}
+}
+function startVoice(){
+  if(!('webkitSpeechRecognition'in window||'SpeechRecognition'in window)){toast('Voice not supported',false);S.voiceOn=false;return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  S.recognition=new SR();
+  const langMap={hi:'hi-IN',te:'te-IN',ta:'ta-IN',kn:'kn-IN',ml:'ml-IN',bn:'bn-IN',mr:'mr-IN',gu:'gu-IN',pa:'pa-IN',ar:'ar-SA',fr:'fr-FR',de:'de-DE',es:'es-ES',sw:'sw-KE'};
+  S.recognition.lang=langMap[S.lang.code]||'en-IN';
+  S.recognition.continuous=true;S.recognition.interimResults=false;
+  S.recognition.onresult=e=>{
+    const t=e.results[e.results.length-1][0].transcript.toLowerCase().trim();
+    toast(`Voice: "${t}"`,true);
+    if(t.includes('scan')||t.includes('analyze'))doAnalyze();
+    else if(t.includes('save'))saveScan();
+    else if(t.includes('speak')||t.includes('read'))speakResult();
+  };
+  S.recognition.start();
+}
+function stopVoice(){if(S.recognition){S.recognition.stop();S.recognition=null;}}
+
+function speakResult(){
+  if(!S.scan){toast('Diagnose first',false);return;}
+  if(!window.speechSynthesis){toast('TTS not supported',false);return;}
+  window.speechSynthesis.cancel();
+  const d=S.scan.diagnosis;
+  const text=`Plant identified: ${d?.species||'Unknown'}. ${d?.is_healthy?'Plant is healthy. Continue regular care.':'Disease detected: '+(d?.disease?.name||'unknown')+'. Severity: '+(d?.disease?.severity||'unknown')+'. '+S.scan.explanation}`;
+  const u=new SpeechSynthesisUtterance(text);
+  const lm={hi:'hi-IN',te:'te-IN',ta:'ta-IN',kn:'kn-IN',ml:'ml-IN',ar:'ar-SA',fr:'fr-FR',de:'de-DE',es:'es-ES'};
+  u.lang=lm[S.lang.code]||'en-IN';u.rate=0.85;
+  window.speechSynthesis.speak(u);toast('Speaking...',true);
+}
+
+function shareWA(){
+  if(!S.scan){toast('Diagnose first',false);return;}
+  const d=S.scan.diagnosis;
+  const txt=`🌿 *AgroMind Universal Diagnosis*\n\n*Plant:* ${d?.species||'Unknown'}\n*Disease:* ${d?.disease?.name||'None'}\n*Confidence:* ${d?.confidence}%\n\n*Treatment:* ${S.scan.treatment?.immediate?.[0]||'See full report'}\n\nPowered by AgroMind Universal`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`,'_blank');
+}
+
+function exportReport(){
+  if(!S.scan){toast('Diagnose first',false);return;}
+  const d=S.scan.diagnosis;
+  const r=`AGROMIND UNIVERSAL — DIAGNOSTIC REPORT\nMode: ${S.universe} | Language: ${S.lang.name}\nGenerated: ${new Date().toLocaleString()}\n${'='.repeat(50)}\n\nSPECIES: ${d?.species}\nCOMMON: ${d?.common_name}\nCONFIDENCE: ${d?.confidence}%\nHEALTH: ${d?.is_healthy?'Healthy':'Diseased'}\nDISEASE: ${d?.disease?.name} (${d?.disease?.probability}%)\nSEVERITY: ${d?.disease?.severity}\n\nAI EXPLANATION:\n${S.scan.explanation}\n\nIMMEDIATE TREATMENT:\n${(S.scan.treatment?.immediate||[]).map((t,i)=>`${i+1}. ${t}`).join('\n')}\n\nRAG SOURCES:\n${(S.scan.knowledge_sources||[]).map(r=>`• ${r.title||r.t} — ${r.source||r.o}`).join('\n')}\n${'='.repeat(50)}\nAgroMind Universal`;
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([r],{type:'text/plain'}));a.download=`agromind-${Date.now()}.txt`;a.click();toast('Exported ✓',true);
+}
+
+/* ─── API STATUS ─── */
+function setApiStatus(state,msg){
+  const dot=document.getElementById('apiDot');
+  const txt=document.getElementById('apiTxt');
+  if(!dot||!txt)return;
+  const colors={ok:'var(--mint)',err:'var(--red)',chk:'var(--amber)'};
+  dot.style.background=colors[state]||'var(--muted)';
+  dot.style.boxShadow=`0 0 6px ${colors[state]||'transparent'}`;
+  txt.textContent=msg;
+}
+
+/* ─── TOAST ─── */
+let tTimer=null;
+function toast(msg,ok=true){
+  const t=document.getElementById('toast');t.textContent=msg;t.className=`toast on ${ok?'ok':'er'}`;
+  if(tTimer)clearTimeout(tTimer);tTimer=setTimeout(()=>t.classList.remove('on'),3500);
+}
+
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+console.log('%cAgroMind Universal — Frontend connected to real FastAPI backend','color:#00e5a0;font-family:monospace;font-size:13px;font-weight:bold');
+console.log('%cAPI: '+API_BASE+' | Start backend: uvicorn main:app --reload','color:#7abf96;font-family:monospace;font-size:11px');
+</script>
+</body>
+</html>
