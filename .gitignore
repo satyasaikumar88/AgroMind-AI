@@ -216,3 +216,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Large files
+agromind_production/data
+agromind_production/PlantVillage
+agromind_production/imagenette2.tgz
